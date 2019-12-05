@@ -1,10 +1,10 @@
 package Ex1;
 
-public class PolynomTesft {
+public class PolynomOldTest {
 	public static void main(String[] args) {
 
-	//	test1();
-	//	test2();
+		test1();
+		test2();
 		test3();//equals and add and string construactor
 		test4(); //build polynom from string and make sub
 		test5();// derivative

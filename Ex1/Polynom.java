@@ -1,10 +1,9 @@
 
 package Ex1;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
+
 import java.util.function.Predicate;
 
 import javax.management.RuntimeErrorException;
@@ -20,6 +19,14 @@ import Ex1.Monom;
  *
  */
 public class Polynom implements Polynom_able{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2192510759376619846L;
+	/**
+	 * 
+	 */
 
 	HashMap< Integer,Monom> monoms=new HashMap< Integer,Monom>();
 	;
@@ -38,8 +45,7 @@ public class Polynom implements Polynom_able{
 	 * @param s: is a string represents a Polynom
 	 */
 	public Polynom(String s) {
-		HashMap< Integer,Monom> monoms = new HashMap< Integer,Monom>();
-		s.toLowerCase();
+		s=s.toLowerCase();
 		Monom x;
 		if(s.length()==1) {                     // the polynom is just x or integer num
 			try {
@@ -73,16 +79,15 @@ public class Polynom implements Polynom_able{
 					s=s.substring(i);
 					i=1;
 				}
-
-
-
-
-
 			}
 
 			Monom y= new Monom(s);
 			this.add(y);	
 		}}
+	public Polynom(Monom m) {
+		// TODO Auto-generated constructor stub
+		this.add(m);
+	}
 	/**
 	 * @param x The variable you want to substitute in this polynom.
 	 * @return this method returns the polynom value  dependent on x.
@@ -163,15 +168,30 @@ public class Polynom implements Polynom_able{
 		this.monoms=pAns.monoms;
 	}
 	/**
+	 * Test if this Polynom is logically equals to p1.
+	 * @param p1
+	 * @return true iff this polynom represents the same function as p1
+	 */
+	public boolean equals (Object p1) {
+		if(p1 instanceof Polynom_able) {
+			return equalsPolynom( (Polynom_able)p1);
+		}
+		else if (p1 instanceof Monom) {
+			Monom x= (Monom)p1;
+			Polynom equal= new Polynom(x.toString());
+			return equalsPolynom( equal);
+		}
+		else
+			return false;                               // for now ..we need to cheack equal to complex function
+	 }
+
+	/**
 	 * @param p1 other polynom to compare
 	 * @return return true if the other polynom equals to this polynom
 	 */
-	@Override
-	public boolean equals(Object p1) {
+	
+	public boolean equalsPolynom(Polynom_able p1) {
 		// TODO Auto-generated method stub
-if(!(p1 instanceof Polynom_able)) {
-	return false;
-}
 		Polynom_able p2 = ((Polynom_able) p1).copy();
 		p2.substract(this);
 		if(!p2.isZero())	return false;
@@ -312,4 +332,11 @@ if(!(p1 instanceof Polynom_able)) {
 			ans.add(itr);
 		}
 		this.monoms=ans.monoms;
+	}
+	@Override
+	public function initFromString(String s) {
+		// TODO Auto-generated method stub
+		Polynom p1= new Polynom(s);
+		this.monoms=p1.monoms;
+		return this;
 	}}

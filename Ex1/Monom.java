@@ -71,7 +71,7 @@ public class Monom implements function{
 	 * @param s the string represent the monom
 	 */
 	public Monom(String s) {
-		s.toLowerCase();
+		s=s.toLowerCase();
 		if (s=="") {
 			this._coefficient=0;
 			this._power=0;
@@ -181,4 +181,15 @@ public class Monom implements function{
 	private static Monom getNewZeroMonom() {return new Monom(ZERO);}
 	private double _coefficient; 
 	private int _power;
+	@Override
+	public function initFromString(String s) {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
+	@Override
+	public function copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
