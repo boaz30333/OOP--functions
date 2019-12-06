@@ -63,7 +63,7 @@ public class Monom implements function{
 	 * 
 	 * @return return if this monom is a zero monom ("0").
 	 */
-	public boolean isZero() {return this.get_coefficient() == 0;}
+	public boolean isZero() {return Math.abs(this.get_coefficient()) <EPSILON;}
 	// ***************** add your code below **********************
 
 	/**

@@ -300,7 +300,8 @@ public class Polynom implements Polynom_able{
 		double a ;
 		while(x0<x1) {
 			a= f(x0) ;
-			sum+= a*eps;
+			if(a>0)
+				sum+= a*eps;
 			x0+= eps;
 		}
 		return sum;
