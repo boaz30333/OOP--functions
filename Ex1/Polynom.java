@@ -2,12 +2,14 @@
 package Ex1;
 
 import java.util.HashMap;
+
 import java.util.Iterator;
 
 import java.util.function.Predicate;
 
 import javax.management.RuntimeErrorException;
 
+import Ex1.ComplexFunction;
 import Ex1.Monom;
 /**
  * This class represents a Polynom with add, multiply functionality, it also should support the following:
@@ -46,6 +48,7 @@ public class Polynom implements Polynom_able{
 	 */
 	public Polynom(String s) {
 		s=s.toLowerCase();
+		 s = s.replaceAll("\\s",""); 
 		Monom x;
 		if(s.length()==1) {                     // the polynom is just x or integer num
 			try {
@@ -180,6 +183,15 @@ public class Polynom implements Polynom_able{
 			Monom x= (Monom)p1;
 			Polynom equal= new Polynom(x.toString());
 			return equalsPolynom( equal);
+		}
+		else if(p1 instanceof ComplexFunction) {
+			ComplexFunction cf1=(ComplexFunction)p1;
+			double x;
+			for(double i=-1;i<1;i=i+0.1) {
+				x=this.f(i)-cf1.f(i);
+				if(Math.abs(x)>0.001) return false;
+			}
+			return true;
 		}
 		else
 			return false;                               // for now ..we need to cheack equal to complex function
@@ -340,4 +352,7 @@ public class Polynom implements Polynom_able{
 		Polynom p1= new Polynom(s);
 		this.monoms=p1.monoms;
 		return this;
-	}}
+	}
+
+
+	}

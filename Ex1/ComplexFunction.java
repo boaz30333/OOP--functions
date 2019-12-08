@@ -1,5 +1,6 @@
 package Ex1;
-
+import Ex1.Polynom;
+import Ex1.Monom;
 public class ComplexFunction implements complex_function{
 	/**
 	 * 
@@ -28,6 +29,37 @@ public class ComplexFunction implements complex_function{
 		this.op= getop(string);
 		this.left = left;
 		this.right=right;
+	}
+	public ComplexFunction(String left) {
+		// TODO Auto-generated constructor stub
+		if(!left.contains(",")) {
+			this.left= new Polynom(left);
+		}
+		else {
+			this.left=new ComplexFunction();
+			this.left.initFromString(left);
+			
+		}
+		this.right=null;
+		this.op= Operation.None;
+	}
+	public ComplexFunction(String string, String left, String right) {
+		// TODO Auto-generated constructor stub
+		if(!left.contains(",")) {
+			this.left= new Polynom(left);
+		}
+		else {
+			this.left=new ComplexFunction();
+			this.left.initFromString(left);
+		}
+		if(!right.contains(",")) {
+			this.right= new Polynom(right) ;
+		}
+		else {
+			this.right=new ComplexFunction();
+			this.right.initFromString(right);
+		}
+		this.op= getop(string);
 	}
 
 	@Override
@@ -67,10 +99,18 @@ public class ComplexFunction implements complex_function{
 		String rightside="";
 		if(s.contains("(")&&s.contains(")")&&s.indexOf("(")<s.lastIndexOf(")")) {
 			this.op=getop(s.substring(0, s.indexOf("(")));
-			int indexmed= getmed(s,s.indexOf("("));
+			int indexmed= getmed(s,s.indexOf("(")+1);
 			leftside=s.substring(s.indexOf("(")+1, indexmed);
 			rightside=s.substring(indexmed+1, s.length()-1);
+			if(leftside.contains(",")) 
+				this.left=new ComplexFunction();
+			else
+				this.left=new Polynom();
 			this.left.initFromString(leftside);
+			if(rightside.contains(",")) 
+				this.right=new ComplexFunction();
+			else
+				this.right=new Polynom();
 			this.right.initFromString(rightside);
 		}
 		if(!s.contains("(")&&!s.contains(")"))
@@ -80,25 +120,34 @@ public class ComplexFunction implements complex_function{
 
 	private int getmed(String s, int indexOf) {
 	// TODO Auto-generated method stub
-		int i =indexOf;
+		int i =s.length()-2;
 		int count=0;
-		while(i<s.length()-1) {
+		while(i>indexOf) {
 			if(s.charAt(i)==','&&count==0) return i;
-			if(s.charAt(i)=='(') count++;
-			if(s.charAt(i)==')') count--;
-			if(count<0) return 0;
+			if(s.charAt(i)=='(') count--;
+			if(s.charAt(i)==')') count++;
+			if(count<0||s.charAt(s.length()-1)!=')') return 0;
+			i--;
 		}
 	return 0;
 }
 	public static Operation getop(String oper) {
 	// TODO Auto-generated method stub
-		if(oper=="plus"||oper=="Plus"||oper=="PLUS") return Operation.Plus;
-		else if(oper=="comp"||oper=="Comp"||oper=="COMP") return Operation.Comp;
-		else if(oper=="times"||oper=="Times"||oper=="TIMES") return Operation.Times;
-		else if(oper=="divid"||oper=="Divid"||oper=="DIVID") return Operation.Divid;
-		else if(oper=="max"||oper=="Max"||oper=="MAX") return Operation.Max;
-		else if(oper=="min"||oper=="Min"||oper=="MIN") return Operation.Min;
-		else return Operation.Error;
+		oper=oper.toLowerCase();
+		if(oper.equalsIgnoreCase( "plus") )
+			return Operation.Plus;
+		else if(oper.equalsIgnoreCase("comp") )
+			return Operation.Comp;
+		else if(oper.equalsIgnoreCase( "times")) 
+			return Operation.Times;
+		else if(oper.equalsIgnoreCase("divid")||oper.equalsIgnoreCase("div"))
+			return Operation.Divid;
+		else if(oper.equalsIgnoreCase("max"))
+			return Operation.Max;
+		else if(oper.equalsIgnoreCase("min"))
+			return Operation.Min;
+		else 
+			return Operation.Error;
 }
 	@Override
 	public function copy() {
@@ -114,6 +163,11 @@ return cf;
 	@Override
 	public void plus(function f1) {
 		// TODO Auto-generated method stub
+		if(this.op==Operation.None) {
+			this.op=Operation.Plus;
+			this.right=f1;
+			return;
+		}
 		this.left=this.copy();
 		this.right=f1;
 		this.op=Operation.Plus;
@@ -123,7 +177,11 @@ return cf;
 
 	@Override
 	public void mul(function f1) {
-		// TODO Auto-generated method stub
+		if(this.op==Operation.None) {
+			this.op=Operation.Times;
+			this.right=f1;
+			return;
+		}
 		this.left=this.copy();
 		this.right=f1;
 		this.op=Operation.Times;	
@@ -131,7 +189,11 @@ return cf;
 
 	@Override
 	public void div(function f1) {
-		// TODO Auto-generated method stub
+		if(this.op==Operation.None) {
+			this.op=Operation.Divid;
+			this.right=f1;
+			return;
+		}
 		this.left=this.copy();
 		this.right=f1;
 		this.op=Operation.Divid;
@@ -139,7 +201,11 @@ return cf;
 
 	@Override
 	public void max(function f1) {
-		// TODO Auto-generated method stub
+		if(this.op==Operation.None) {
+			this.op=Operation.Max;
+			this.right=f1;
+			return;
+		}
 		this.left=this.copy();
 		this.right=f1;
 		this.op=Operation.Max;
@@ -147,7 +213,11 @@ return cf;
 
 	@Override
 	public void min(function f1) {
-		// TODO Auto-generated method stub
+		if(this.op==Operation.None) {
+			this.op=Operation.Min;
+			this.right=f1;
+			return;
+		}
 		this.left=this.copy();
 		this.right=f1;
 		this.op=Operation.Min;
@@ -155,7 +225,11 @@ return cf;
 
 	@Override
 	public void comp(function f1) {
-		// TODO Auto-generated method stub
+		if(this.op==Operation.None) {
+			this.op=Operation.Comp;
+			this.right=f1;
+			return;
+		}
 		this.left=this.copy();
 		this.right=f1;
 		this.op=Operation.Comp;
@@ -178,5 +252,19 @@ return cf;
 		// TODO Auto-generated method stub
 		return this.op;
 	}
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		toString(sb);
+		
+		return sb.toString();
+		
+	}
+	private void toString(StringBuilder sb) {
+		// TODO Auto-generated method stub
+		 sb.append(""+this.op+"("+this.left+","+this.right+")");
+		return ;
+	}
+	
 
 }

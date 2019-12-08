@@ -72,6 +72,7 @@ public class Monom implements function{
 	 */
 	public Monom(String s) {
 		s=s.toLowerCase();
+		s = s.replaceAll("\\s","");
 		if (s=="") {
 			this._coefficient=0;
 			this._power=0;
@@ -183,13 +184,14 @@ public class Monom implements function{
 	private int _power;
 	@Override
 	public function initFromString(String s) {
-		// TODO Auto-generated method stub
-		
-		return null;
+		Monom m = new Monom(s);
+		this.set_coefficient(m.get_coefficient());
+		this.set_power(m.get_power());
+		return this;
 	}
 	@Override
 	public function copy() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Monom(this.get_coefficient(),this.get_power());
 	}
 }
