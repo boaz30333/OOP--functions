@@ -32,6 +32,8 @@ public class Functions_GUI implements functions{
 	@Override
 	public boolean addAll(Collection<? extends function> arg0) {
 		// TODO Auto-generated method stub
+		Iterator<? extends function> a= arg0.iterator();
+		
 		return false;
 	}
 

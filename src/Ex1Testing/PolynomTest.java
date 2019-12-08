@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import Ex1.ComplexFunction;
 import Ex1.Monom;
 import Ex1.Polynom;
+import Ex1.function;
 
 class PolynomTest {
 	String[] polynoms = {"5", "-x","-3.2x^2","-1.5x^2","12x+5*x+x^2+0x^2-2.5x^3+4","10x+2.5*x^3"};
@@ -133,7 +134,7 @@ void setUpBeforeTest() throws Exception {
 		Polynom p1=new Polynom();
 		p1.add(new Monom("x^2"));
 		p1.add(new Polynom("5x+6"));
-		Object x =cf1;
+		function x =cf1;
 		boolean b= p1.equals(x);
 		assertEquals(true,b);
 		
