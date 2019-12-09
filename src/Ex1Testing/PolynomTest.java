@@ -30,6 +30,7 @@ void setUpBeforeTest() throws Exception {
 	void testPolynom() {
 		Polynom x=new Polynom(); 
 		assertEquals(x.toString(),"0");
+
 	}
 
 	@Test
@@ -188,9 +189,10 @@ void setUpBeforeTest() throws Exception {
 	@Test
 	void testInitFromString() {
 		Polynom tmp= new Polynom();
+		Polynom tmp1= new Polynom();
 		for(int i=0;i<polynoms.length;i++) {
 			tmp =new  Polynom(polynoms[i]);
-		Polynom p=	(Polynom) tmp.initFromString(tmp.toString());
+		Polynom p=	(Polynom) tmp1.initFromString(polynoms[i]);
 			assertEquals(p,tmp);
 
 		}

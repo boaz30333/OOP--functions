@@ -16,8 +16,32 @@ public class ComplexFunction implements complex_function{
 		ComplexFunction cf1=new ComplexFunction();
 		return FromString(s,cf1);
 	}
+	public function FromString(String s,ComplexFunction cf1) {
+		//  
+		String leftside="";
+		String rightside="";
+		if(s.contains("(")&&s.contains(")")&&s.indexOf("(")<s.lastIndexOf(")")) {
+			cf1.op=getop(s.substring(0, s.indexOf("(")));
+			int indexmed= getmed(s,s.indexOf("(")+1);
+			leftside=s.substring(s.indexOf("(")+1, indexmed);
+			rightside=s.substring(indexmed+1, s.length()-1);
+			if(leftside.contains(",")) 
+				cf1.left=new ComplexFunction();
+			else
+				cf1.left=new Polynom();
+			cf1.left=cf1.left.initFromString(leftside);
+			if(rightside.contains(",")) 
+				cf1.right=new ComplexFunction();
+			else
+				cf1.right=new Polynom();
+			cf1.right=cf1.right.initFromString(rightside);
+		}
+		if(!s.contains("(")&&!s.contains(")"))
+			cf1.left=new Polynom(s);
+		return cf1;
+	}
 	
-	public ComplexFunction() {
+	private ComplexFunction() {
 		this.right=this.left=null;
 		this.op=Operation.None;
 	}
@@ -43,7 +67,7 @@ public class ComplexFunction implements complex_function{
 		}
 		else {
 			this.left=new ComplexFunction();
-			this.left.initFromString(left);
+			this.left=this.left.initFromString(left);
 			
 		}
 		this.right=null;
@@ -56,14 +80,14 @@ public class ComplexFunction implements complex_function{
 		}
 		else {
 			this.left=new ComplexFunction();
-			this.left.initFromString(left);
+			this.left=this.left.initFromString(left);
 		}
 		if(!right.contains(",")) {
 			this.right= new Polynom(right) ;
 		}
 		else {
 			this.right=new ComplexFunction();
-			this.right.initFromString(right);
+			this.right=this.right.initFromString(right);
 		}
 		this.op= getop(string);
 	}
@@ -71,6 +95,7 @@ public class ComplexFunction implements complex_function{
 	@Override
 	public double f(double x) {
 		// TODO Auto-generated method stub
+		if(this.left==null) return 0;
 		if(this.op==Operation.None) return this.left.f(x);
 		double sum=0;
 		if(this.op==Operation.Plus)
@@ -98,30 +123,7 @@ public class ComplexFunction implements complex_function{
 5) java.awt.Color[r=0,g=255,b=0]  f(x)= max(max(max(max(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)),div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)),-1.0x^4 +2.4x^2 +3.1),+0.1x^5 -1.2999999999999998x +5.0)
 6) java.awt.Color[r=255,g=175,b=175]  f(x)= min(min(min(min(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)),div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)),-1.0x^4 +2.4x^2 +3.1),+0.1x^5 -1.2999999999999998x +5.0
  */
-	public function FromString(String s,ComplexFunction cf1) {
-		//  
-		String leftside="";
-		String rightside="";
-		if(s.contains("(")&&s.contains(")")&&s.indexOf("(")<s.lastIndexOf(")")) {
-			cf1.op=getop(s.substring(0, s.indexOf("(")));
-			int indexmed= getmed(s,s.indexOf("(")+1);
-			leftside=s.substring(s.indexOf("(")+1, indexmed);
-			rightside=s.substring(indexmed+1, s.length()-1);
-			if(leftside.contains(",")) 
-				cf1.left=new ComplexFunction();
-			else
-				cf1.left=new Polynom();
-			cf1.left.initFromString(leftside);
-			if(rightside.contains(",")) 
-				cf1.right=new ComplexFunction();
-			else
-				cf1.right=new Polynom();
-			cf1.right.initFromString(rightside);
-		}
-		if(!s.contains("(")&&!s.contains(")"))
-			cf1.left=new Polynom(s);
-		return cf1;
-	}
+
 
 	private int getmed(String s, int indexOf) {
 	// TODO Auto-generated method stub
