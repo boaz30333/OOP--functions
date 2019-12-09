@@ -59,6 +59,7 @@ public class Monom implements function{
 		ans = this.get_coefficient()*Math.pow(x, p);
 		return ans;
 	} 
+	
 	/**
 	 * 
 	 * @return return if this monom is a zero monom ("0").
@@ -124,6 +125,38 @@ public class Monom implements function{
 
 
 	}
+	public boolean equalsMonom(Polynom_able obj) {
+		Polynom_able p2 = obj.copy();
+		Polynom temp1=new Polynom(this.toString());
+		p2.substract(temp1);
+		if(!p2.isZero()) return false;
+		return true;
+	}
+	
+	public boolean equals(Object obj) {
+		if(obj instanceof Polynom_able) {
+			return equalsMonom( (Polynom_able)obj);
+
+		}
+		else if (obj instanceof Monom) {
+			String x= ((Monom)obj).toString();
+			Polynom_able equal= new Polynom(x);
+			return equalsMonom((Polynom_able)equal);
+		}
+		else if(obj instanceof ComplexFunction) {
+			Polynom poly =new Polynom(obj.toString());
+			ComplexFunction cf1=(ComplexFunction)obj;
+			double x;
+			for(double i=-1;i<1;i=i+0.1) {
+				x=poly.f(i)-cf1.f(i);
+				if(Math.abs(x)>0.001) return false;
+			}
+			return true;
+		}
+		else
+			return false;
+	}	
+	
 	/**
 	 * 
 	 * @param m this method add monom 'm' to this monom 
@@ -134,6 +167,7 @@ public class Monom implements function{
 		else
 			throw new RuntimeException("can\"t add monom with diffrent power: this monom="+this+"the addition monom="+m); 
 	}
+	
 	/**
 	 * 
 	 * @param d this method multiply this monom by monom 'd' 
@@ -166,12 +200,12 @@ public class Monom implements function{
 	 *
 	 * @return   this method return if this monom is the same like monom a;
 	 */
-	public boolean equals(Monom a) {
-		double num =Math.abs(a._coefficient-this._coefficient);
-		if(num<EPSILON && this.get_power() == a.get_power()) return true;
-		else
-			return false;
-	}
+//	public boolean equals(Monom a) {
+//		double num =Math.abs(a._coefficient-this._coefficient);
+//		if(num<EPSILON && this.get_power() == a.get_power()) return true;
+//		else
+//			return false;
+//	}
 	private void set_coefficient(double a){
 		this._coefficient = a;
 	}
@@ -185,13 +219,13 @@ public class Monom implements function{
 	@Override
 	public function initFromString(String s) {
 		Monom m = new Monom(s);
-		this.set_coefficient(m.get_coefficient());
-		this.set_power(m.get_power());
-		return this;
+		return m;
 	}
 	@Override
 	public function copy() {
 		// TODO Auto-generated method stub
 		return new Monom(this.get_coefficient(),this.get_power());
 	}
+	
+	
 }

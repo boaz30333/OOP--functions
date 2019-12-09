@@ -14,8 +14,8 @@ class ComplexFunctionTest {
 	static void setUpBeforeClass() throws Exception {
 		ComplexFunction cf= new ComplexFunction(new Polynom("2x"));
 	}
-
-	@Test
+	
+		@Test
 	void testComplexFunction() {   
 		fail("Not yet implemented"); // TODO
 	}
