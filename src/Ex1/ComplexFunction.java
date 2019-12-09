@@ -10,7 +10,13 @@ public class ComplexFunction implements complex_function{
 	function left;
 	Operation op;
 
-
+	@Override
+	public function initFromString(String s) {
+		// TODO Auto-generated method stub
+		ComplexFunction cf1=new ComplexFunction();
+		return FromString(s,cf1);
+	}
+	
 	public ComplexFunction() {
 		this.right=this.left=null;
 		this.op=Operation.None;
@@ -28,7 +34,7 @@ public class ComplexFunction implements complex_function{
 		if(right instanceof Monom) right= new Polynom((Monom)right);
 		this.op= getop(string);
 		this.left = left;
-		this.right=right;
+		this.right=right; 
 	}
 	public ComplexFunction(String left) {
 		// TODO Auto-generated constructor stub
@@ -92,30 +98,29 @@ public class ComplexFunction implements complex_function{
 5) java.awt.Color[r=0,g=255,b=0]  f(x)= max(max(max(max(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)),div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)),-1.0x^4 +2.4x^2 +3.1),+0.1x^5 -1.2999999999999998x +5.0)
 6) java.awt.Color[r=255,g=175,b=175]  f(x)= min(min(min(min(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)),div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)),-1.0x^4 +2.4x^2 +3.1),+0.1x^5 -1.2999999999999998x +5.0
  */
-	@Override
-	public function initFromString(String s) {
+	public function FromString(String s,ComplexFunction cf1) {
 		//  
 		String leftside="";
 		String rightside="";
 		if(s.contains("(")&&s.contains(")")&&s.indexOf("(")<s.lastIndexOf(")")) {
-			this.op=getop(s.substring(0, s.indexOf("(")));
+			cf1.op=getop(s.substring(0, s.indexOf("(")));
 			int indexmed= getmed(s,s.indexOf("(")+1);
 			leftside=s.substring(s.indexOf("(")+1, indexmed);
 			rightside=s.substring(indexmed+1, s.length()-1);
 			if(leftside.contains(",")) 
-				this.left=new ComplexFunction();
+				cf1.left=new ComplexFunction();
 			else
-				this.left=new Polynom();
-			this.left.initFromString(leftside);
+				cf1.left=new Polynom();
+			cf1.left.initFromString(leftside);
 			if(rightside.contains(",")) 
-				this.right=new ComplexFunction();
+				cf1.right=new ComplexFunction();
 			else
-				this.right=new Polynom();
-			this.right.initFromString(rightside);
+				cf1.right=new Polynom();
+			cf1.right.initFromString(rightside);
 		}
 		if(!s.contains("(")&&!s.contains(")"))
-			this.left=new Polynom(s);
-		return this;
+			cf1.left=new Polynom(s);
+		return cf1;
 	}
 
 	private int getmed(String s, int indexOf) {
@@ -265,6 +270,6 @@ return cf;
 		 sb.append(""+this.op+"("+this.left+","+this.right+")");
 		return ;
 	}
-	
+
 
 }

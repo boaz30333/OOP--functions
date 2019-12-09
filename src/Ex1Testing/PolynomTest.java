@@ -189,9 +189,9 @@ void setUpBeforeTest() throws Exception {
 	void testInitFromString() {
 		Polynom tmp= new Polynom();
 		for(int i=0;i<polynoms.length;i++) {
-			polynomArr[i]=new  Polynom(polynoms[i]);
-			tmp.initFromString(polynomArr[i].toString());
-			assertEquals(polynomArr[i],tmp);
+			tmp =new  Polynom(polynoms[i]);
+		Polynom p=	(Polynom) tmp.initFromString(tmp.toString());
+			assertEquals(p,tmp);
 
 		}
 	}

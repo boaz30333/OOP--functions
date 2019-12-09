@@ -350,8 +350,7 @@ public class Polynom implements Polynom_able{
 	public function initFromString(String s) {
 		// TODO Auto-generated method stub
 		Polynom p1= new Polynom(s);
-		this.monoms=p1.monoms;
-		return this;
+		return p1;
 	}
 
 
