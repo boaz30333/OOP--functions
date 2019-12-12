@@ -16,7 +16,7 @@ public class ComplexFunction implements complex_function{
 		ComplexFunction cf1=new ComplexFunction();
 		return FromString(s,cf1);
 	}
-	public function FromString(String s,ComplexFunction cf1) {
+	private function FromString(String s,ComplexFunction cf1) {
 		//  
 		String leftside="";
 		String rightside="";
@@ -48,17 +48,20 @@ public class ComplexFunction implements complex_function{
 	public ComplexFunction(function func) {
 		// TODO Auto-generated constructor stub
 		if(func instanceof Monom) func= new Polynom((Monom)func);
-		this.left=func;
+		this.left=func.copy();
 		this.right=null;
 		this.op= Operation.None;
 	}
-	public ComplexFunction(String string, function left, function right) {
+	public ComplexFunction(Operation op, function left, function right) {
 		// TODO Auto-generated constructor stub
 		if(left instanceof Monom) left= new Polynom((Monom)left);
 		if(right instanceof Monom) right= new Polynom((Monom)right);
-		this.op= getop(string);
-		this.left = left;
-		this.right=right; 
+		this.op= op;
+		this.left = left.copy();
+		this.right=right.copy(); 
+	}
+	public ComplexFunction(String op, function left, function right) {
+		 this(getop(op),left,right);
 	}
 	public ComplexFunction(String left) {
 		// TODO Auto-generated constructor stub
@@ -96,19 +99,24 @@ public class ComplexFunction implements complex_function{
 	public double f(double x) {
 		// TODO Auto-generated method stub
 		if(this.left==null) return 0;
-		if(this.op==Operation.None) return this.left.f(x);
+		else if(this.op==Operation.None) return this.left.f(x);
 		double sum=0;
 		if(this.op==Operation.Plus)
 		 sum = this.left.f(x)+this.right.f(x);
-		if(this.op==Operation.Divid)
-			 sum = this.left.f(x)/this.right.f(x);
-		if(this.op==Operation.Max)
+		else if(this.op==Operation.Divid) {
+			if(this.right.f(x)==0) {
+				throw new ArithmeticException("cant divide by zero");
+			}
+				 sum = this.left.f(x)/this.right.f(x);
+		}
+	
+		else if(this.op==Operation.Max)
 			 sum = Math.max(this.left.f(x),this.right.f(x));
-		if(this.op==Operation.Min)
+		else if(this.op==Operation.Min)
 			 sum = Math.min(this.left.f(x),this.right.f(x));
-		if(this.op==Operation.Times)
+		else if(this.op==Operation.Times)
 			 sum = this.left.f(x)*this.right.f(x);
-		if(this.op==Operation.Comp)
+		else if(this.op==Operation.Comp)
 			 sum = this.left.f(this.right.f(x));
 		return sum;
 	}
@@ -145,7 +153,7 @@ public class ComplexFunction implements complex_function{
 			return Operation.Plus;
 		else if(oper.equalsIgnoreCase("comp") )
 			return Operation.Comp;
-		else if(oper.equalsIgnoreCase( "times")) 
+		else if(oper.equalsIgnoreCase( "times")||oper.equalsIgnoreCase("mul")) 
 			return Operation.Times;
 		else if(oper.equalsIgnoreCase("divid")||oper.equalsIgnoreCase("div"))
 			return Operation.Divid;
@@ -176,7 +184,7 @@ return cf;
 			return;
 		}
 		this.left=this.copy();
-		this.right=f1;
+		this.right=f1.copy();
 		this.op=Operation.Plus;
 		
 		
@@ -186,11 +194,11 @@ return cf;
 	public void mul(function f1) {
 		if(this.op==Operation.None) {
 			this.op=Operation.Times;
-			this.right=f1;
+			this.right=f1.copy();
 			return;
 		}
 		this.left=this.copy();
-		this.right=f1;
+		this.right=f1.copy();
 		this.op=Operation.Times;	
 	}
 
@@ -198,11 +206,11 @@ return cf;
 	public void div(function f1) {
 		if(this.op==Operation.None) {
 			this.op=Operation.Divid;
-			this.right=f1;
+			this.right=f1.copy();
 			return;
 		}
 		this.left=this.copy();
-		this.right=f1;
+		this.right=f1.copy();
 		this.op=Operation.Divid;
 	}
 
@@ -222,11 +230,11 @@ return cf;
 	public void min(function f1) {
 		if(this.op==Operation.None) {
 			this.op=Operation.Min;
-			this.right=f1;
+			this.right=f1.copy();
 			return;
 		}
 		this.left=this.copy();
-		this.right=f1;
+		this.right=f1.copy();
 		this.op=Operation.Min;
 	}
 
@@ -234,11 +242,11 @@ return cf;
 	public void comp(function f1) {
 		if(this.op==Operation.None) {
 			this.op=Operation.Comp;
-			this.right=f1;
+			this.right=f1.copy();
 			return;
 		}
 		this.left=this.copy();
-		this.right=f1;
+		this.right=f1.copy();
 		this.op=Operation.Comp;
 	}
 
@@ -251,6 +259,8 @@ return cf;
 	@Override
 	public function right() {
 		// TODO Auto-generated method stub
+		if (this.right==null) return null;
+		else
 		return this.right();
 	}
 
@@ -271,6 +281,39 @@ return cf;
 		// TODO Auto-generated method stub
 		 sb.append(""+this.op+"("+this.left+","+this.right+")");
 		return ;
+	}
+	
+	public boolean equals (Object f1) {
+		boolean definedA=true;
+		boolean definedB=true;	
+		if(f1 instanceof function) {
+			double a=0;
+			double b=0;
+			double x;
+			for(double i=0;i<50;i++) {
+				try {
+					a=this.f(i);
+				}
+					catch(ArithmeticException e){
+						definedA=false;
+					}
+				try {
+					b=((function)f1).f(i);
+				}
+					catch(ArithmeticException e){
+						definedB=false;
+					}
+				if (definedA!=definedB)	
+					return false;
+				if(definedA==true&&definedB==true) {
+				x=a-b;
+					if(Math.abs(x)>0.001) 
+						return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
 

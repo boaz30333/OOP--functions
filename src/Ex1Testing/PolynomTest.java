@@ -98,8 +98,16 @@ void setUpBeforeTest() throws Exception {
 			Polynom copied =(Polynom)polynomArr[i].copy();
 			polynomArr[i].substract(copied);
 			assertEquals("0",polynomArr[i].toString());
+			polynomArr[i]=new  Polynom(polynoms[i]);
+			polynomArr[i].add(new Monom("x"));
+			assertnotEquals(copied.toString(),polynomArr[i].toString());			
 
 		} 
+	}
+
+	private void assertnotEquals(String string, String string2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Test

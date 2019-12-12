@@ -23,7 +23,6 @@ public class PolynomOldTest {
 		for(int i=0;i<monoms.length;i++) {
 			Monom m = new Monom(monoms[i]);
 			p1.add(m);
-			double aa = p1.area(0, 1, 0.1);
 			System.out.println(p1);
 		}
 		p1.substract(p1);

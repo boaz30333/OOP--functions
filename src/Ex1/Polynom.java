@@ -5,9 +5,6 @@ import java.util.HashMap;
 
 import java.util.Iterator;
 
-import java.util.function.Predicate;
-
-import javax.management.RuntimeErrorException;
 
 import Ex1.ComplexFunction;
 import Ex1.Monom;
@@ -105,6 +102,7 @@ public class Polynom implements Polynom_able{
 			sum+= b.f(x);
 
 		}
+		if (sum==0) return 0;
 		return sum;
 	}
 	/**
