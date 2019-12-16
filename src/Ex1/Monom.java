@@ -127,8 +127,8 @@ public class Monom implements function{
 	}
 	public boolean equalsMonom(Monom obj) {
 		Monom p2 = (Monom) obj.copy();
-if(p2.get_coefficient()==this.get_coefficient()&&this.get_coefficient()==0) 		return true;
-else if(p2.get_coefficient()==this.get_coefficient()&&this.get_power()==p2.get_power())return true;
+if(Math.abs(p2.get_coefficient()-0)<0.0001 && Math.abs(this.get_coefficient()-0)<0.0001) 		return true;
+else if(Math.abs(p2.get_coefficient()-this.get_coefficient())<0.0001 &&this.get_power()==p2.get_power())return true;
 return false;
 	}
 	

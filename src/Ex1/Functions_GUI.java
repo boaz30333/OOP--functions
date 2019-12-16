@@ -42,13 +42,7 @@ public class Functions_GUI implements functions{
 				catch(Exception e) {
 					y[i][j]=Double.MAX_VALUE;
 				}
-				try {
-					asmp=funcs.get(i).f(x[i][j]+0.01);
-					b[i][j]=true;
-				}
-				catch(Exception e) {
-					b[i][j]=false;
-				}
+	
 				
 
 			}
@@ -86,7 +80,7 @@ public class Functions_GUI implements functions{
 			StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
 			StdDraw.setPenRadius(0.005);
 			for (int j = 0; j< res; j++) {
-				if(y[i][j]<Double.MAX_VALUE-1 && y[i][j+1]<Double.MAX_VALUE-1 && b[i][j] )
+				if(y[i][j]<Double.MAX_VALUE-1 && y[i][j+1]<Double.MAX_VALUE-1 )
 					StdDraw.line(x[i][j], y[i][j], x[i][j+1], y[i][j+1]);
 			}
 			StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
