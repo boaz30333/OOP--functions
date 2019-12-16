@@ -59,7 +59,7 @@ class Functions_GUITest {
 	}
 
 	@Test
-	void testDrawFunctions() {
+	void testDrawFunctionsFromJson() {
 		_data.drawFunctions("GUI_params.txt");
 	}
 
