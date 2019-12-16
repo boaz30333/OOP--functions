@@ -125,30 +125,26 @@ public class Monom implements function{
 
 
 	}
-	public boolean equalsMonom(Polynom_able obj) {
-		Polynom_able p2 = obj.copy();
-		Polynom temp1=new Polynom(this.toString());
-		p2.substract(temp1);
-		if(!p2.isZero()) return false;
-		return true;
+	public boolean equalsMonom(Monom obj) {
+		Monom p2 = (Monom) obj.copy();
+if(p2.get_coefficient()==this.get_coefficient()&&this.get_coefficient()==0) 		return true;
+else if(p2.get_coefficient()==this.get_coefficient()&&this.get_power()==p2.get_power())return true;
+return false;
 	}
 	
 	public boolean equals(Object obj) {
 		if(obj instanceof Polynom_able) {
-			return equalsMonom( (Polynom_able)obj);
+			return equalsMonom( new Monom(obj.toString())) ;
 
 		}
 		else if (obj instanceof Monom) {
-			String x= ((Monom)obj).toString();
-			Polynom_able equal= new Polynom(x);
-			return equalsMonom((Polynom_able)equal);
+			return equalsMonom((Monom)obj);
 		}
 		else if(obj instanceof ComplexFunction) {
-			Polynom poly =new Polynom(obj.toString());
 			ComplexFunction cf1=(ComplexFunction)obj;
 			double x;
 			for(double i=-1;i<1;i=i+0.1) {
-				x=poly.f(i)-cf1.f(i);
+				x=this.f(i)-cf1.f(i);
 				if(Math.abs(x)>0.001) return false;
 			}
 			return true;

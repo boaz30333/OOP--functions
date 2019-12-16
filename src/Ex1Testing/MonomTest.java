@@ -61,11 +61,10 @@ class MonomTest {
 	void testEqualsObject() {//------------------------------------------to check
 		for(int i=0;i<monomArr.length;i++) {
 			monomArr[i]=new  Monom(monoms[i]);
-			Monom d=new Monom(-1,0);
 			Monom m=new Monom(monomArr[i]);
-			m.multipy(d);
+			m.multipy(Monom.MINUS1);
 			monomArr[i].add(m);
-			assertEquals(monomArr[i].toString(),ZERO);//-------coff=0 poewr=real number 
+			assertEquals(monomArr[i],Monom.ZERO);//-------coff=0 poewr=real number 
 
 		}
 	}
@@ -103,12 +102,18 @@ class MonomTest {
 
 	@Test
 	void testInitFromString() {
-		String[] arrS = {"0", "1","2","3","4","55"};
+		String[] arrS = {"0", "1","2x","3","4","55"};
+		Monom tmp;
 		for(int i=0;i<monoms.length;i++) {
 			String s="4";
 			Monom m=new Monom(0,0);
-			m.initFromString(s);
-			assertEquals(m,arrS[i]);
+			try {
+			tmp=(Monom) m.initFromString(s);
+			}
+			catch(Exception e) {
+				fail("");
+			}
+			
 		}
 	}
 
