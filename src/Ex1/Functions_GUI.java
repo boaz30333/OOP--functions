@@ -19,7 +19,17 @@ import com.google.gson.Gson;
 public class Functions_GUI implements functions{
 	LinkedList<function> funcs = new LinkedList<function>();
 
+	/**
+	 * Draws all the functions in the collection in a GUI window using the
+	 * given parameters for the GUI windo and the range & resolution
+	 * @param width - the width of the window - in pixels
+	 * @param height - the height of the window - in pixels
+	 * @param rx - the range of the horizontal axis
+	 * @param ry - the range of the vertical axis
+	 * @param resolution - the number of samples with in rx: the X_step = rx/resulution
+	 */
 	public void drawFunctions(int w, int h, Range rx, Range ry, int res) {
+		
 		StdDraw.setCanvasSize(w,h);
 
 		double maxY = ry.get_max(), minY =ry.get_min();
@@ -92,8 +102,9 @@ public class Functions_GUI implements functions{
 
 
 
+	
 	public function get(int i) {
-
+		
 		return funcs.get(i);
 	}
 
@@ -109,9 +120,13 @@ public class Functions_GUI implements functions{
 
 	}
 
+	
+	/**
+	 *
+	 */
 	@Override
 	public boolean addAll(Collection<? extends function> arg0) {
-
+		
 		Iterator<? extends function> iter= arg0.iterator();
 		function b;
 		boolean flag=true;
@@ -192,8 +207,14 @@ public class Functions_GUI implements functions{
 		return this.funcs.toArray(arg0);
 	}
 
+	/**
+	 * Initial a new collection of functions from a file
+	 * @param file - the file name
+	 * @throws IOException if the file does not exists of unreadable (wrong format)
+	 */
 	@Override
 	public void initFromFile(String fileName) throws IOException {
+		
         String line = "";
         Functions_GUI ans= new Functions_GUI();
         ComplexFunction tmp= new ComplexFunction("x");
@@ -216,7 +237,11 @@ br.close();
         }
 
 	}
-
+	/**
+	 * save the in the file Name
+	 * @param file - the file name
+	 * @throws IOException if the file is not writable
+	 */
 	@Override
 	public void saveToFile(String fileName) throws IOException {
 
@@ -244,6 +269,11 @@ br.close();
 
 	}
 
+	/**
+	 * Draws all the functions in the collection in a GUI window using the given JSON file
+	 * @param json_file - the file with all the parameters for the GUI window. 
+	 * Note: is the file id not readable or in wrong format should use default values. 
+	 */
 	@Override
 	public void drawFunctions(String json_file) {
 		Gson gson = new Gson();
