@@ -1,11 +1,11 @@
 package Ex1;
 
 public class Gui_params {
-	int Width=800;
-	int Height=800;
-	double[] Range_X= {-10,10};
-	double[] Range_Y= {-20,20};
-	int Resolution=1000;
+	public int Width=800;
+	public int Height=800;
+	public double[] Range_X= {-10,10};
+	public double[] Range_Y= {-20,20};
+	public int Resolution=1000;
 	public Gui_params(int w, int h,double[] rx,double[] ry, int res) {
 		this.Height= h;
 				this.Resolution=res;

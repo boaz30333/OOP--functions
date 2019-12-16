@@ -2,57 +2,61 @@ package Ex1;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
+
 
 public class Functions_GUI implements functions{
 	LinkedList<function> funcs = new LinkedList<function>();
 
 	public void drawFunctions(int w, int h, Range rx, Range ry, int res) {
-		StdDraw.setCanvasSize(h,w);
+		StdDraw.setCanvasSize(w,h);
 
 		double maxY = ry.get_max(), minY =ry.get_min();
-double m=rx.get_max()-rx.get_min();
-double n=ry.get_max()-ry.get_min();
+		double m=rx.get_max()-rx.get_min();
+		double n=ry.get_max()-ry.get_min();
 
 		// the function y = sin(4x), sampled at n+1 points
 		// between x = 0 and x = pi 
 		double[][] x = new double[funcs.size()][res+1];
 		double[][] y = new double[funcs.size()][res+1];
-		 for(int i = 0; i < funcs.size(); i++)
-		 {
-		for (int j = 0; j <= res; j++) {
-			x[i][j] =rx.get_min() +(m*j)/res;
-			try {
-				y[i][j]=funcs.get(i).f(x[i][j]);
-			}
-catch(Exception e) {
-	y[i][j]=Double.MAX_VALUE;
-}
+		boolean[][] b=  new boolean[funcs.size()][res+1];
+		double asmp;
+		for(int i = 0; i < funcs.size(); i++)
+		{
+			for (int j = 0; j <= res; j++) {
+				x[i][j] =rx.get_min() +(m*j)/res;
+				try {
+					y[i][j]=funcs.get(i).f(x[i][j]);
+				}
+				catch(Exception e) {
+					y[i][j]=Double.MAX_VALUE;
+				}
+				try {
+					asmp=funcs.get(i).f(x[i][j]+0.01);
+					b[i][j]=true;
+				}
+				catch(Exception e) {
+					b[i][j]=false;
+				}
+				
 
+			}
 		}
-		 }
 		// rescale the coordinate system
 		StdDraw.setXscale(rx.get_min(),rx.get_max());
 		StdDraw.setYscale(minY, maxY);
-		
+
 		//////// vertical lines
 		StdDraw.setPenColor(Color.LIGHT_GRAY);
 		for (double j = rx.get_min(); j <= rx.get_max(); j=j+(m)/20) {
@@ -77,17 +81,17 @@ catch(Exception e) {
 		}
 
 		// plot the approximation to the function
-		 for(int i = 0; i < funcs.size(); i++)
-		 {
-				StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
-				StdDraw.setPenRadius(0.005);
-		for (int j = 0; j< res; j++) {
-			if(y[i][j]<Double.MAX_VALUE && y[i][j+1]<Double.MAX_VALUE )
-			StdDraw.line(x[i][j], y[i][j], x[i][j+1], y[i][j+1]);
+		for(int i = 0; i < funcs.size(); i++)
+		{
+			StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
+			StdDraw.setPenRadius(0.005);
+			for (int j = 0; j< res; j++) {
+				if(y[i][j]<Double.MAX_VALUE-1 && y[i][j+1]<Double.MAX_VALUE-1 && b[i][j] )
+					StdDraw.line(x[i][j], y[i][j], x[i][j+1], y[i][j+1]);
+			}
+			StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
+			StdDraw.setPenRadius(0.005);
 		}
-		StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
-		StdDraw.setPenRadius(0.005);
-	}
 	}
 
 
@@ -118,11 +122,11 @@ catch(Exception e) {
 		function b;
 		boolean flag=true;
 		while(iter.hasNext()) {
-			 b=  iter.next().copy();
+			b=  iter.next().copy();
 			flag=this.add(b);
 			if(flag==false)return false;
 		}
-		
+
 		return true;
 	}
 
@@ -130,13 +134,13 @@ catch(Exception e) {
 	public void clear() {
 
 		this.funcs.clear();
-		
+
 	}
 
 	@Override
 	public boolean contains(Object arg0) {
 
-		
+
 		return this.funcs.contains(arg0);
 	}
 
@@ -184,37 +188,77 @@ catch(Exception e) {
 
 	@Override
 	public Object[] toArray() {
-		
+
 		return this.funcs.toArray();
 	}
 
 	@Override
 	public <T> T[] toArray(T[] arg0) {
-		
+
 		return this.funcs.toArray(arg0);
 	}
 
 	@Override
-	public void initFromFile(String file) throws IOException {
+	public void initFromFile(String fileName) throws IOException {
+        String line = "";
+        Functions_GUI ans= new Functions_GUI();
+        ComplexFunction tmp= new ComplexFunction("x");
+        try 
+        {
+        	BufferedReader br = new BufferedReader(new FileReader(fileName));
+        	
+            while ((line = br.readLine()) != null) 
+            {
+               ans.add(tmp.initFromString(line));
 
-		
+                }
+            
+br.close();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+            System.out.println("could not read file");
+        }
+
 	}
 
 	@Override
-	public void saveToFile(String file) throws IOException {
-		// TODO Auto-generated method stub
+	public void saveToFile(String fileName) throws IOException {
+
 		
+		try 
+		{
+			PrintWriter pw = new PrintWriter(new File(fileName));
+			
+			StringBuilder sb = new StringBuilder();
+			Iterator<function> iter= this.iterator();
+			function b;
+			while(iter.hasNext()) {
+				b=  iter.next().copy();
+				sb.append(b.toString());
+				sb.append("\n");
+			}
+			pw.write(sb.toString());
+			pw.close();
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+			return;
+		}
+
 	}
 
 	@Override
 	public void drawFunctions(String json_file) {
 		Gson gson = new Gson();
 		Gui_params params=new Gui_params();
-		
+
 		try 
 		{
 			FileReader reader = new FileReader(json_file);
-			 params = gson.fromJson(reader,Gui_params.class);
+			params = gson.fromJson(reader,Gui_params.class);
 		} 
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -222,7 +266,7 @@ catch(Exception e) {
 		Range rx=new Range(params.Range_X[0],params.Range_X[1]);
 		Range ry=new Range(params.Range_Y[0],params.Range_Y[1]);
 		drawFunctions(params.Width, params.Height,rx,ry, params.Resolution);
-		
+
 	}
 
 }

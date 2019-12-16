@@ -29,12 +29,26 @@ public class ComplexFunction implements complex_function{
 				cf1.left=new ComplexFunction();
 			else
 				cf1.left=new Polynom();
+			try {
 			cf1.left=cf1.left.initFromString(leftside);
+			}
+			catch(Exception e) {
+				throw new RuntimeException("cant build sub function:"+rightside);
+			}
 			if(rightside.contains(",")) 
 				cf1.right=new ComplexFunction();
 			else
 				cf1.right=new Polynom();
-			cf1.right=cf1.right.initFromString(rightside);
+			if(!rightside.equalsIgnoreCase("null")) {
+				
+				try {
+				cf1.right=cf1.right.initFromString(rightside);
+				}
+				catch(Exception e) {
+					throw new RuntimeException("cant build sub function:"+rightside);
+				}
+				
+			}
 		}
 		if(!s.contains("(")&&!s.contains(")"))
 			cf1.left=new Polynom(s);
@@ -161,6 +175,8 @@ public class ComplexFunction implements complex_function{
 			return Operation.Max;
 		else if(oper.equalsIgnoreCase("min"))
 			return Operation.Min;
+		else if(oper.equalsIgnoreCase("none"))
+			return Operation.None;
 		else 
 			return Operation.Error;
 }
